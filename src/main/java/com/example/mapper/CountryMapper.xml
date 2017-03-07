@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.CountryMapper">
+<resultMap type="com.example.domain.Country" id="WithCity">
+	<id 		property="code"				column="country_code"/>		
+	<result  	property="name"				column="country_name"/>
+	<result  	property="continent"		column="country_continent"/>
+	<result  	property="region"			column="country_region"/>
+	<result  	property="surfaceArea"		column="country_surfaceArea"/>
+	<result  	property="indepYear"		column="country_indepYear"/>
+	<result  	property="population"		column="country_population"/>
+	<result  	property="lifeExpectancy"	column="country_lifeExpectancy"/>
+	<result  	property="gnp"				column="country_gnp"/>
+	<result  	property="gnpOld"			column="country_gnpOld"/>
+	<result  	property="localName"		column="country_localName"/>
+	<result  	property="governmentForm"	column="country_governmentForm"/>
+	<result  	property="headOfState"		column="country_headOfState"/>
+	<result  	property="capital"			column="country_capital"/>
+	<result  	property="code2"			column="country_code2"/>
+<collection 	property="citys" 			ofType="com.example.domain.City">
+	<id 		property="id" 				column="city_id"/>
+	<result  	property="name" 			column="city_name"/>
+	<result  	property="countryCode" 		column="city_contry_code"/>
+	<result  	property="district" 		column="city_district"/>
+	<result  	property="population" 		column="city_population"/>
+</collection>
+	
+
+
+</resultMap>
+
+
+<select id="selectAllWithCity" resultMap="WithCity">
+SELECT		co.CODE 			AS country_code,
+			co.NAME				AS country_name,
+			co.CONTINENT		AS country_continent,
+			co.REGION			AS country_region,
+			co.SURFACE_AREA		AS country_surfaceArea,
+			co.INDEP_YEAR		AS country_indepYear,
+			co.POPULATION		AS country_population,
+			co.LIFE_EXPECTANCY	AS country_lifeExpectancy,
+			co.GNP				AS country_gnp,
+			co.GNP_OLD			AS country_gnpOld,
+			co.LOCAL_NAME		AS country_localName,
+			co.GOVERNMENT_FORM	AS country_governmentForm,
+			co.HEAD_OF_STATE	AS country_headOfState,
+			co.CAPITAL			AS country_capital,
+			co.CODE2			AS country_code2,
+    		c.ID 				AS city_id,
+			c.NAME 				AS city_name,
+			c.COUNTRY_CODE 		AS city_contry_code,
+			c.DISTRICT 			AS city_district,
+			c.POPULATION 		AS city_population
+		  FROM COUNTRY co LEFT outer JOIN CITY c 
+		    ON co.CODE =c.COUNTRY_CODE
+		 where co.CODE = 'KOR'
+
+</select>
+
+<resultMap type="com.example.domain.Country" id="countryWithCity2">
+<collection property="citys" column="country_code" select="selectCitysByCode"/>
+</resultMap>
+<select id="selectCitysByCode" resultType="com.example.domain.City">
+select * 
+  from city
+ where country_code = #{country_code}
+</select>
+<select id="selectPageWithCode" resultMap="countryWithCity2">
+	select c.*,c.code as country_code 
+  	  from country c
+    offset #{firstItem} - 1 rows
+     fetch next #{itemsPerPage} rows only
+</select>
+
+<select id="selectByIdWithCty" resultMap="WithCity">
+SELECT		co.CODE 			AS country_code,
+			co.NAME				AS country_name,
+			co.CONTINENT		AS country_continent,
+			co.REGION			AS country_region,
+			co.SURFACE_AREA		AS country_surfaceArea,
+			co.INDEP_YEAR		AS country_indepYear,
+			co.POPULATION		AS country_population,
+			co.LIFE_EXPECTANCY	AS country_lifeExpectancy,
+			co.GNP				AS country_gnp,
+			co.GNP_OLD			AS country_gnpOld,
+			co.LOCAL_NAME		AS country_localName,
+			co.GOVERNMENT_FORM	AS country_governmentForm,
+			co.HEAD_OF_STATE	AS country_headOfState,
+			co.CAPITAL			AS country_capital,
+			co.CODE2			AS country_code2,
+    		c.ID 				AS city_id,
+			c.NAME 				AS city_name,
+			c.COUNTRY_CODE 		AS city_contry_code,
+			c.DISTRICT 			AS city_district,
+			c.POPULATION 		AS city_population
+		  FROM Country co LEFT outer JOIN CITY c ON c.COUNTRY_CODE =co.CODE
+		where co.code =  #{code}
+
+</select>
+</mapper>
