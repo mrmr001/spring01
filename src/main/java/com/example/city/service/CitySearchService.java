@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.domain.City;
+import com.example.exception.NotFoundRuntimeException;
 import com.example.mapper.CityMapper;
 import com.example.util.Pagination;
 
@@ -36,11 +37,13 @@ public class CitySearchService {
 	}
 	
 	public Map<String, Object>  getPage(int pageNo) {
+		log.info("getCityByCountry("+pageNo+")");
 		return getPage(pageNo,false);
 		
 	}
 	
 	public Map<String, Object>  getPage(int pageNo, boolean withCountry) {
+		log.info("getCityByCountry("+pageNo+","+withCountry+")");
 		Pagination paging = new Pagination();
 		paging.setTotalItem(mapper.selectTotalCount());
 		paging.setPageNo(pageNo);
@@ -70,6 +73,8 @@ public class CitySearchService {
 			city=mapper.selectByIdWithContry(id);
 		else
 			city=mapper.selectById(id);
+//		if ( city == null)
+//			throw new NotFoundRuntimeException("city가 없습니다");
 		return city;
 		
 	}

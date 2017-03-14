@@ -2,6 +2,7 @@ package com.example.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -23,7 +24,7 @@ public interface EmpMapper {
 	
 	@Select({ 
 		"SELECT * FROM emp 		",
-		"order by empno 				",
+		"order by deptno 				",
 		"OFFSET #{firstItem}-1 ROWS				",
 		" FETCH NEXT #{itemsPerPage} ROWS ONLY	"
 		})
@@ -32,8 +33,16 @@ public interface EmpMapper {
 	List<Emp> selectPageWithDept(Pagination page);
 	
 	
-	@Select("select * from city where empno = #empno")
+	@Select("select * from emp where empno = #{empno}")
 	Emp selectByEmpno(int empno); 
 	
 	Emp selectByEmpnoWithDept(int empno);
+	
+	int insert(Emp emp);
+	
+	int updateById(Emp emp);
+	
+	@Delete("delete from emp where empno= #{empno}")
+	int deleteById(int id);
+	
 }

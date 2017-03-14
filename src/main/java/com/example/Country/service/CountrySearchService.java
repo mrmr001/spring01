@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.domain.City;
 import com.example.domain.Country;
+import com.example.exception.NotFoundRuntimeException;
 import com.example.mapper.CityMapper;
 import com.example.mapper.CountryMapper;
 import com.example.util.Pagination;
@@ -38,7 +39,7 @@ public class CountrySearchService {
 	}
 	
 	public Map<String, Object>  getPage(int pageNo) {
-		log.info("getCityById("+pageNo+")");
+		log.info("getCountryByCity("+pageNo+")");
 		return getPage(pageNo,false);
 		
 	}
@@ -53,8 +54,6 @@ public class CountrySearchService {
 			list = countrymapper.selectPageWithCode(paging);
 		else
 			list = countrymapper.selectPage(paging);
-		
-		
 		Map<String, Object> map =new HashMap<>();
 		map.put("country", list);
 		map.put("paging", paging);
@@ -74,6 +73,10 @@ public class CountrySearchService {
 			country=countrymapper.selectByIdWithCty(code);
 		else
 			country=countrymapper.selectByCode(code);
+		
+//		if ( country == null)
+//			throw new NotFoundRuntimeException("country가 없습니다");
+		
 		return country;
 		
 	}

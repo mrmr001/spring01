@@ -9,72 +9,75 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.domain.City;
-import com.example.domain.Country;
-import com.example.mapper.CityMapper;
-import com.example.mapper.CountryMapper;
+import com.example.domain.Dept;
+import com.example.exception.NotFoundRuntimeException;
+import com.example.mapper.DeptMapper;
 import com.example.util.Pagination;
 
 @Service
 public class DeptSearchService {
-	static Log log = LogFactory.getLog(DeptSearchServiceTest.class);
-	@Autowired
-	CountryMapper countrymapper;
+	static Log log = LogFactory.getLog(DeptSearchService.class);
 	
-	public List<Country> getListAll() {
+	
+	@Autowired
+	DeptMapper deptMapper;
+	
+	public List<Dept> getListAll() {
 		log.info("getListAll()");
 		return getListAll(false);
 	}
 	
 	
-	public List<Country> getListAll(boolean withCity){
-		log.info("getListAll("+withCity+")");
-		List<Country> list =null;
-		if(withCity) 
-			list = countrymapper.selectAllWithCity();
+	public List<Dept> getListAll(boolean withEmp){
+		log.info("getListAll("+withEmp+")");
+		List<Dept> list =null;
+		if(withEmp) 
+			list = deptMapper.selectAllWithEmp();
 		else
-			list=countrymapper.selectAll();
+			list=deptMapper.selectAll();
 		return list;
 	}
 	
 	public Map<String, Object>  getPage(int pageNo) {
-		log.info("getCityById("+pageNo+")");
+		log.info("getdeptByDeptno("+pageNo+")");
 		return getPage(pageNo,false);
 		
 	}
 	
-	public Map<String, Object>  getPage(int pageNo, boolean withCity) {
-		log.info("getCityById("+pageNo+","+withCity+")");
+	public Map<String, Object>  getPage(int pageNo, boolean withEmp) {
+		log.info("getdeptByDeptno("+pageNo+","+withEmp+")");
 		Pagination paging = new Pagination();
-		paging.setTotalItem(countrymapper.selectTotalCount());
+		paging.setTotalItem(deptMapper.count());
 		paging.setPageNo(pageNo);
-		List<Country> list =null;
-		if (withCity)
-			list = countrymapper.selectPageWithCode(paging);
+		List<Dept> list =null;
+		if (withEmp)
+			list = deptMapper.selectPageWithEmp(paging);
 		else
-			list = countrymapper.selectPage(paging);
+			list = deptMapper.selectPage(paging);
 		
 		
 		Map<String, Object> map =new HashMap<>();
-		map.put("country", list);
+		map.put("depts", list);
 		map.put("paging", paging);
 		return map;
 		
 	}
 	
 	
-	public Country getByCode(String code){
-		log.info("selectByCode("+code+")");
-		return getByCode(code,false);
+	public Dept getBydeptno(int deptno){
+		log.info("getBydeptno("+deptno+")");
+		return getBydeptno(deptno,false);
 	}
-	public Country getByCode(String code,boolean withCity){
-		log.info("getCityById("+code+","+withCity+")");
-		Country country=null;
-		if(withCity)
-			country=countrymapper.selectByIdWithCty(code);
+	public  Dept getBydeptno(int deptno,boolean withEmp){
+		log.info("getBydeptno("+deptno+","+withEmp+")");
+		Dept dept=null;
+		if(withEmp)
+			dept=deptMapper.selectByDeptnoWithEmp(deptno);
 		else
-			country=countrymapper.selectByCode(code);
-		return country;
+			dept=deptMapper.selectByDeptno(deptno);
+		if ( dept == null)
+			throw new NotFoundRuntimeException("dept가 없습니다");
+		return dept;
 		
 	}
 }

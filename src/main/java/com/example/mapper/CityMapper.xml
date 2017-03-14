@@ -109,4 +109,30 @@ SELECT 	c.ID 				AS city_id,
      ON c.COUNTRY_CODE = co.CODE
  where c.id = #{id}
 </select>
+
+<insert id="insert">
+	<selectKey keyProperty="id" keyColumn="id" resultType="int" order="BEFORE">
+	 SELECT city_id_seq.nextval from dual
+	</selectKey>
+		insert into city
+				(
+						ID, 				
+						NAME, 				
+						COUNTRY_CODE, 		
+						DISTRICT, 			
+						POPULATION 		
+				)
+		values
+				(
+						#{id}, 				
+						#{name}, 				
+						#{countryCode}, 		
+						#{district}, 			
+						#{population} 
+				)
+</insert>
+
+
+<update id="updateById"></update>
+
 </mapper>

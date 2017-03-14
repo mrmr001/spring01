@@ -63,7 +63,7 @@ SELECT		co.CODE 			AS country_code,
 <select id="selectCitysByCode" resultType="com.example.domain.City">
 select * 
   from city
- where country_code = #{country_code}
+ where country_code = #{code}
 </select>
 <select id="selectPageWithCode" resultMap="countryWithCity2">
 	select c.*,c.code as country_code 
@@ -97,4 +97,54 @@ SELECT		co.CODE 			AS country_code,
 		where co.code =  #{code}
 
 </select>
+
+
+<insert id="insert">
+		insert into country
+		(
+			CODE, 			
+			NAME,	
+			CONTINENT,
+			REGION,
+			SURFACE_AREA,
+			INDEP_YEAR,
+			POPULATION,
+			LIFE_EXPECTANCY,
+			GNP,
+			GNP_OLD,
+			LOCAL_NAME,
+			GOVERNMENT_FORM,
+			HEAD_OF_STATE,
+			CAPITAL,
+			CODE2
+		)
+		values
+		(
+			#{code},
+			#{name},
+			#{continent},
+			#{region},
+			#{surfaceArea},
+		  	#{indepYear},
+		  	#{population},
+		  	#{lifeExpectancy},
+		  	#{gnp},
+		  	#{gnpOld},
+		  	#{localName},
+		  	#{governmentForm},
+		 	#{headOfState},
+		 	#{capital},
+		  	#{code2}
+		)
+
+</insert>
+
+
+<update id="updateByCode">
+
+
+
+</update>
+
+
 </mapper>

@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.example.domain.City;
+import com.example.domain.Country;
 import com.example.exception.NotFoundRuntimeException;
 import com.example.util.Pagination;
 
@@ -17,11 +18,13 @@ import com.example.util.Pagination;
 public class CityMapperTest {
 
 	@Autowired
-	CityMapper mapper;
+	CityMapper cityMapper;
+	@Autowired
+	CountryMapper countryMapper;
 	
 	@Test
 	public void selectAll() {
-		List<City> list = mapper.selectAll();
+		List<City> list = cityMapper.selectAll();
 		
 		for (City c : list) {
 			System.out.println(c);
@@ -33,7 +36,7 @@ public class CityMapperTest {
 	
 	@Test
 	public void selectAllWithCountry() {
-		List<City> list = mapper.selectAllWithCountry();
+		List<City> list = cityMapper.selectAllWithCountry();
 		
 		for (City c : list) {
 			System.out.println(c);
@@ -45,9 +48,9 @@ public class CityMapperTest {
 	@Test
 	public void selectpage() {
 		Pagination page =new Pagination();
-		page.setTotalItem(mapper.selectTotalCount());
+		page.setTotalItem(cityMapper.selectTotalCount());
 		page.setPageNo(1000);
-		List<City> list = mapper.selectPage(page);
+		List<City> list = cityMapper.selectPage(page);
 		
 		for (City c : list) {
 			System.out.println(c);
@@ -59,9 +62,9 @@ public class CityMapperTest {
 	@Test
 	public void selectPageWithCountry() {
 		Pagination page =new Pagination();
-		page.setTotalItem(mapper.selectTotalCount());
+		page.setTotalItem(cityMapper.selectTotalCount());
 		page.setPageNo(2);
-		List<City> list = mapper.selectPageWithCountry(page);
+		List<City> list = cityMapper.selectPageWithCountry(page);
 		
 		for (City c : list) {
 			System.out.println(c);
@@ -71,7 +74,18 @@ public class CityMapperTest {
 	}
 	@Test
 	public void selectById() {
-		City city = mapper.selectById(10);
+		City city = cityMapper.selectById(10);
+		
+//		if (city == null) {
+//			throw new NotFoundRuntimeException("정보부족");
+//			
+//		}
+			System.out.println("city="+city);
+	}
+	
+	@Test
+	public void selectByIdWithContry() {
+		City city = cityMapper.selectByIdWithContry(10);
 		
 		if (city == null) {
 			throw new NotFoundRuntimeException("정보부족");
@@ -81,13 +95,17 @@ public class CityMapperTest {
 	}
 	
 	@Test
-	public void selectByIdWithContry() {
-		City city = mapper.selectByIdWithContry(10);
-		
-		if (city == null) {
-			throw new NotFoundRuntimeException("정보부족");
-			
+	public void test_insert() {
+		City city = new City();
+		city.setName("xxx");
+		city.setCountryCode("KOR");
+		Country country = countryMapper.selectByCode(city.getCountryCode());
+		if (country == null){
+			System.out.println("error = "+"country err");
+		    return;
 		}
-			System.out.println(city);
+		int cnt = cityMapper.insert(city);
+		System.out.println(cityMapper.selectById(city.getId()));
 	}
+	
 }

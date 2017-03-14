@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.example.domain.Country;
 import com.example.domain.Dept;
 import com.example.exception.NotFoundRuntimeException;
 import com.example.util.Pagination;
@@ -86,6 +87,27 @@ public class DeptMapperTest {
 		}
 			System.out.println(dept);
 }
-
+	@Test
+	public void test_insert() {
+		Dept dept = new Dept();
+		dept.setDeptno(90);
+		dept.setDname("ssss");
+		Dept d = mapper.selectByDeptno(dept.getDeptno());
+		if (d != null) {
+			System.out.println("key err");
+			return;
+		}
+		int cnt = mapper.insert(dept);
+		System.out.println(mapper.selectByDeptno(dept.getDeptno()));
+		
+	}
+	
+	@Test
+	public void test_delete() {
+		int deptno = 90;
+		int cnt=mapper.deleteBydeptno(deptno);
+		System.out.println("cmt="+cnt);
+		System.out.println("country="+mapper.deleteBydeptno(deptno));
+	}
 	
 }

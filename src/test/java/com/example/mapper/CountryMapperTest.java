@@ -88,5 +88,26 @@ public class CountryMapperTest {
 			System.out.println(country);
 }
 
-
+	@Test
+	public void test_insert() {
+		Country country = new Country();
+		country.setCode("XXX");
+		country.setName("DDDD");
+		Country c = mapper.selectByCode(country.getCode());
+		if (c != null) {
+			System.out.println("key err");
+			return;
+		}
+		int cnt = mapper.insert(country);
+		System.out.println(mapper.selectByCode(country.getCode()));
+		
+	}
+	
+	@Test
+	public void test_delete() {
+		String code = "XXX";
+		int cnt=mapper.deleteByCode(code);
+		System.out.println("cmt="+cnt);
+		System.out.println("country="+mapper.selectByCode(code));
+	}
 }

@@ -46,6 +46,8 @@ select *
 	offset #{firstItem} - 1 rows
 	 fetch next #{itemsPerPage} rows only
 </select>
+
+
 <select id="selectByDeptnoWithEmp" resultMap="WithEmp">
  select	d.DEPTNO 	as dept_deptno,
 	   	d.DNAME		as dept_dname,
@@ -64,5 +66,23 @@ select *
 
 </select>
 
+<insert id="insert">
+	insert into dept
+	(
+	DEPTNO,
+	DNAME,
+	LOC
+	)
+	values
+	(
+	#{deptno},
+	#{dname},
+	#{loc}
+	)
+	
 
+</insert>
+
+<update id="updateByDeptno">
+</update>
 </mapper>
